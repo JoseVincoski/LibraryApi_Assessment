@@ -1,0 +1,19 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/LibrarySystem.Api/LibrarySystem.Api.csproj" />
+    <Project Path="src/LibrarySystem.Contracts/LibrarySystem.Contracts.csproj" />
+    <Project Path="src/LibrarySystem.Service/LibrarySystem.Service.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/LibrarySystem.IntegrationTests/LibrarySystem.IntegrationTests.csproj" />
+    <Project Path="tests/LibrarySystem.SystemTests/LibrarySystem.SystemTests.csproj" />
+    <Project Path="tests/LibrarySystem.UnitTests/LibrarySystem.UnitTests.csproj" />
+    <Project Path="tests/LibrarySystem.FunctionalTests/LibrarySystem.FunctionalTests.csproj" />
+  </Folder>
+  <Folder Name="/Warmup/">
+    <Project Path="warmup/LibrarySystem.Warmups/LibrarySystem.Warmups.csproj" />
+  </Folder>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
+</Solution>

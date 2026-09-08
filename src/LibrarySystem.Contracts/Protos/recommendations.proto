@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option csharp_namespace = "LibrarySystem.Contracts.Recommendations";
+
+service RecommendationsGrpc {
+  rpc GetBookRecommendations (RecommendationRequest) returns (RecommendationResponse);
+}
+
+message RecommendationRequest {
+  string book_id = 1;
+  int32 max_results = 2;
+}
+
+message RecommendationResponse {
+  repeated string recommended_book_titles = 1;
+}

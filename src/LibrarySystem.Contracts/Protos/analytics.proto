@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option csharp_namespace = "LibrarySystem.Contracts.Analytics";
+
+service AnalyticsGrpc {
+  rpc GetMostBorrowedBooks (MostBorrowedRequest) returns (MostBorrowedResponse);
+}
+
+message MostBorrowedRequest {
+  int32 days_lookback = 1;
+  int32 max_results = 2;
+}
+
+message BookDto {
+  string id = 1;
+  string title = 2;
+  int32 borrow_count = 3;
+}
+
+message MostBorrowedResponse {
+  repeated BookDto books = 1;
+}

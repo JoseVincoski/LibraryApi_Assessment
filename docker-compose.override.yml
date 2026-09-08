@@ -1,0 +1,51 @@
+# Note: Many environment variables here should be coming from a secure place in production.
+services:
+  library-db:
+    environment:
+      - POSTGRES_DB=library_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=verySecurePassword123!
+    ports:
+      - "5432:5432"
+
+  seq:
+    environment:
+      - ACCEPT_EULA=Y
+      # Exposing Seq without authentication is done strictly for local evaluation convenience.
+      - SEQ_FIRSTRUN_NOAUTHENTICATION=true
+    ports:
+      - "5341:5341"
+      - "8081:80"
+
+  library-service:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      # This connection string should be stored in a secure secret manager (e.g., AWS Secrets Manager or Azure Key Vault) in production.
+      - ConnectionStrings__DefaultConnection=Host=library-db;Port=5432;Database=library_db;Username=postgres;Password=verySecurePassword123!
+      - Kestrel__Endpoints__Http__Url=http://0.0.0.0:80
+      - Kestrel__Endpoints__Grpc__Url=http://0.0.0.0:5001
+      - Kestrel__Endpoints__Grpc__Protocols=Http2
+      - Serilog__WriteTo__1__Args__serverUrl=http://seq:5341 
+    depends_on:
+      library-db:
+        condition: service_healthy
+      seq:
+        condition: service_started
+
+  library-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=80
+      - GrpcSettings__ServiceUrl=http://library-service:5001
+      # The gRPC endpoint above is HTTP/2-only, so a plain health-check GET
+      # can't be issued against it. Point health checks at the Service's
+      # regular HTTP endpoint instead.
+      - GrpcSettings__HealthCheckUrl=http://library-service:80/health
+      - Serilog__WriteTo__1__Args__serverUrl=http://seq:5341 
+    ports:
+      - "5000:80"
+    depends_on:
+      library-service:
+        condition: service_started
+      seq:
+        condition: service_started

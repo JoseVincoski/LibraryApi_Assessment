@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option csharp_namespace = "LibrarySystem.Contracts.Loans";
+
+service LoansGrpc {
+  rpc BorrowBook (BorrowBookRequest) returns (BorrowBookResponse);
+  rpc ReturnBook (ReturnBookRequest) returns (ReturnBookResponse);
+}
+
+message BorrowBookRequest {
+  string book_id = 1;
+  string reader_id = 2;
+}
+
+message BorrowBookResponse {
+  string loan_id = 1;
+  string book_id = 2;
+  string reader_id = 3;
+  string borrowed_at_utc = 4;
+}
+
+message ReturnBookRequest {
+  string loan_id = 1;
+}
+
+message ReturnBookResponse {
+  string loan_id = 1;
+  string returned_at_utc = 2;
+}

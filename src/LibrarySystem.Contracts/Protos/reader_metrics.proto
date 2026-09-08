@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option csharp_namespace = "LibrarySystem.Contracts.ReaderMetrics";
+
+service ReaderMetricsGrpc {
+  rpc GetMostActiveReaders (ActiveReadersRequest) returns (ActiveReadersResponse);
+  rpc GetReadingPace (ReadingPaceRequest) returns (ReadingPaceResponse);
+}
+
+message ActiveReadersRequest {
+  string start_date_utc = 1;
+  string end_date_utc = 2;
+  int32 max_results = 3;
+}
+
+message UserDto {
+  string id = 1;
+  string name = 2;
+  int32 borrow_count = 3;
+}
+
+message ActiveReadersResponse {
+  repeated UserDto readers = 1;
+}
+
+message ReadingPaceRequest {
+  string reader_id = 1;
+}
+
+message ReadingPaceResponse {
+  string reader_name = 2;
+  double pages_per_day = 3;
+}

@@ -1,0 +1,27 @@
+name: rebtel-library-system
+
+services:
+  library-db:
+    image: postgres:17-alpine
+    container_name: library-db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d library_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  seq:
+    image: datalust/seq:latest
+    container_name: library-seq
+
+  library-service:
+    build:
+      context: .
+      dockerfile: src/LibrarySystem.Service/Dockerfile
+
+  library-api:
+    build:
+      context: .
+      dockerfile: src/LibrarySystem.Api/Dockerfile
+    depends_on:
+      - library-service
